@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<title>FOR YOU (HBD) 🐷</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- GOOGLE FONTS -->
+<link href="https://fonts.googleapis.com/css2?family=Monoton&display=swap" rel="stylesheet">
+
+
+<style>
+
+body{
+margin:0;
+min-height:100vh;
+font-family:'Poppins', sans-serif;
+background:linear-gradient(135deg,#1b1b2f,#162447,#1f4068);
+color:#f5f5f5;
+text-align:center;
+}
+
+/* HAPPY BIRTHDAY heading */
+h2{
+font-family:'Monoton', sans-serif;
+font-size:3rem;
+letter-spacing:3px;
+word-spacing: 20px;
+
+margin-top:40px;
+text-shadow:0 0 12px rgba(255,180,200,0.9);
+}
+
+#lyrics{
+max-width:600px;
+margin:40px auto;
+padding:20px;
+background:rgba(0,0,0,0.35);
+border-radius:16px;
+backdrop-filter:blur(6px);
+max-height:300px;
+overflow-y:auto;
+display:none;
+}
+
+/* default: hidden future lyrics */
+#lyrics p{
+opacity:0;
+margin:8px 0;
+transition:opacity .4s, transform .4s;
+}
+
+/* current lyric */
+#lyrics p.current{
+opacity:1;
+font-weight:600;
+font-size:1.25em;
+text-shadow:0 0 10px rgba(255,180,200,.9);
+transform:scale(1.05);
+}
+
+/* past lyrics */
+#lyrics p.past{
+opacity:0.35;
+}
+
+/* next lyric preview */
+#lyrics p.next{
+opacity:0.35;
+}
+
+audio{
+margin-top:30px;
+width:90%;
+max-width:400px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2> HAPPY BIRTHDAY </h2>
+<p>Dedicated to 🫶-YOU 🐷-🫶</p>
+
+<div id="lyrics">
+
+<p data-time="0">Koi aur dooja kyun❓ mujhe</p>
+<p data-time="5">Na❌ tere🫵 siva chahiye</p>
+<p data-time="8">Har safar🗺️ mein mujhe</p>
+<p data-time="11">Tu🫵 hi rehnuma chahiye</p>
+<p data-time="15">Jeene ko bas mujhe</p>
+<p data-time="17">Tu🫵 hi meherbaan chahiye</p>
+<p data-time="21">Ho...</p>
+<p data-time="23">Seene mein agar tu🫵 dard hai</p>
+<p data-time="28">Na❌ koi dawaa💊 chahiye</p>
+<p data-time="31">Tu🫵 lahu🩸 ki tarah</p>
+<p data-time="34">Ragon mein rawaan chahiye</p>
+<p data-time="37">Anjaam jo chaahe mera ho</p>
+<p data-time="41">Aagaaz yun chahiye</p>
+<p data-time="43">Tu🫵 chahiye, tu🫵 chahiye</p>
+<p data-time="46">Shaam-o-subah tu🫵 chahiye</p>
+<p data-time="50">Tu🫵 chahiye... tu🫵 chahiye..</p>
+<p data-time="53">Har martabaa🕖.. tu🫵 chahiye</p>
+
+</div>
+
+<br>
+
+<audio id="song" controls preload="metadata">
+<source src="https://dl.dropboxusercontent.com/scl/fi/4nl66jef3aezljm1jev2w/AA_Tu_Chahiye_OST_Bajrangi_Bhaijaan_-mp3-VEED.mp3?rlkey=b7g994l5dcx3t6vhrju4dzbwv&dl=1" type="audio/mpeg">
+</audio>
+
+<script>
+
+const song = document.getElementById("song");
+const lyricsBox = document.getElementById("lyrics");
+const lines = Array.from(lyricsBox.querySelectorAll("p"));
+
+let unlocked = false;
+let currentIndex = -1;
+
+const times = lines.map(line => parseFloat(line.dataset.time));
+
+song.addEventListener("play", () => {
+if(!unlocked){
+lyricsBox.style.display="block";
+unlocked=true;
+}
+});
+
+song.addEventListener("timeupdate", () => {
+
+const t = song.currentTime;
+
+for(let i=0;i<times.length;i++){
+
+if(t >= times[i] && (i === times.length-1 || t < times[i+1])){
+
+if(currentIndex !== i){
+
+lines.forEach(l => l.classList.remove("current","past","next"));
+
+lines.forEach((line,index)=>{
+
+if(index < i) line.classList.add("past");
+if(index === i) line.classList.add("current");
+if(index === i+1) line.classList.add("next");
+
+});
+
+lines[i].scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+currentIndex = i;
+
+}
+
+break;
+
+}
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
+
